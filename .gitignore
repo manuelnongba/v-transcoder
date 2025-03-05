@@ -1,0 +1,8 @@
+auth/manifest/
+auth/venv/
+
+gateway/manifest/
+gateway/venv/
+gateway/auth/__pycache__/
+gateway/auth_service/__pycache__/
+gateway/storage/__pycache__/
