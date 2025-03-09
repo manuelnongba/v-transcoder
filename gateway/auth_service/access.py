@@ -8,7 +8,7 @@ def login(request):
   basic_auth = (auth.username, auth.password)
 
   response = requests.post(
-    f"http://{os.environ.get("AUTH_SERVICE_ADDRESS")}/login",
+    f"http://{os.environ.get('AUTH_SERVICE_ADDRESS')}/login",
     auth=basic_auth
   )
 

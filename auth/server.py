@@ -31,7 +31,7 @@ def login():
       conn = get_db_connection()
       cursor = conn.cursor()
       res = cursor.execute("""
-        SELECT email, password FROM users WHERE email=%s"
+        SELECT email, password FROM users WHERE email=%s
       """, (auth.username,)
       )
 
