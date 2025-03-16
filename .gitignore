@@ -6,3 +6,12 @@ gateway/venv/
 gateway/auth/__pycache__/
 gateway/auth_service/__pycache__/
 gateway/storage/__pycache__/
+
+converter/manifest/
+converter/venv/
+converter/convert/__pycache__/
+converter/.DS_Store
+converter/convert/.DS_Store
+
+rabbit/manifest/
+
