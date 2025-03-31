@@ -35,10 +35,10 @@ def login():
       """, (auth.username,)
       )
 
-      if res > 0:
-           user_row = cursor.fetchone()
-           email = user_row[0]
-           password = user_row[1]
+      user_row = cursor.fetchone()
+
+      if user_row:
+           email, password = user_row
 
            if auth.username != email or auth.password != password:
                   return "invalid credentials", 401
