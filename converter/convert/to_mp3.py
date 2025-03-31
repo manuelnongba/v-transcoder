@@ -1,6 +1,6 @@
 import pika, json, os, tempfile
 from bson.objectid import ObjectId
-import moviepy.editor
+from moviepy.editor import VideoFileClip
 
 def start(message, fs_videos, fs_mp3s, channel):
   message = json.loads(message)
@@ -12,11 +12,11 @@ def start(message, fs_videos, fs_mp3s, channel):
   # add video contents to empty file
   tf.write(out.read())
   # create audio from temp file
-  audio = moviepy.editor.VideoFileClip(tf.name).audio
+  audio = VideoFileClip(tf.name).audio
   tf.close()
 
   # write audio to the file
-  tf_path = tempfile.gettempdir() + f"/{message["video_fid"]}.mp3"
+  tf_path = tempfile.gettempdir() + f"/{message['video_fid']}.mp3"
   audio.write_audiofile(tf_path)
 
   # save file to mongo
@@ -26,10 +26,10 @@ def start(message, fs_videos, fs_mp3s, channel):
   f.close()
   os.remove(tf_path)
 
-  message["mp3_fid"] = str(fid) 
+  message["mp3_fid"] = str(fid)
 
   try:
-    channel.basic_publish(
+     channel.basic_publish(
       exchange="",
       routing_key=os.environ.get("MP3_QUEUE"),
       body=json.dumps(message),
