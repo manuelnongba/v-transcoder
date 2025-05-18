@@ -13,6 +13,15 @@ converter/convert/__pycache__/
 converter/.DS_Store
 converter/convert/.DS_Store
 
+notification/manifest/
+notification/venv/
+notification/convert/__pycache__/
+notification/.DS_Store
+notification/convert/.DS_Store
+
 rabbit/manifest/
 
+test.mkv
+
+.DS_Store
 
