@@ -10,7 +10,7 @@ CREATE TABLE users(
   password VARCHAR(255) NOT NULL
 );
 
-INSERT INTO users (email, password) VALUES ('eanongba19@gmail.com', 'Admin123');
+INSERT INTO users (email, password) VALUES ('eanongba11@gmail.com', 'Admin123');
 
 -- DROP DATABASE auth
 ALTER DATABASE auth OWNER TO emmanuelanongba;
