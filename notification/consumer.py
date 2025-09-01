@@ -4,7 +4,11 @@ from send import email
 def main():
   #rabibtmq connection
   connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host="rabbitmq")
+    pika.ConnectionParameters(
+      host="rabbitmq",
+      heartbeat=600,
+      blocked_connection_timeout=300
+      )
   )
   channel = connection.channel()
 

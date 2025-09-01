@@ -1,27 +1,21 @@
-auth/manifest/
-auth/venv/
+.env
+*.env
 
-gateway/manifest/
-gateway/venv/
-gateway/auth/__pycache__/
-gateway/auth_service/__pycache__/
-gateway/storage/__pycache__/
+*/venv/
+venv/
 
-converter/manifest/
-converter/venv/
-converter/convert/__pycache__/
-converter/.DS_Store
-converter/convert/.DS_Store
+*/manifest/secret.yaml
+manifest/secret.yaml
 
-notification/manifest/
-notification/venv/
-notification/convert/__pycache__/
-notification/.DS_Store
-notification/convert/.DS_Store
-
-rabbit/manifest/
-
-test.mkv
+__pycache__/
+*/__pycache__/
 
 .DS_Store
+*/.DS_Store
+
+# Test files
+test.mkv
+
+*/env
+env
 

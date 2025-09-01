@@ -13,10 +13,13 @@ def main():
 
   #rabibtmq connection
   connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host="rabbitmq")
+    pika.ConnectionParameters(
+      host="rabbitmq", 
+      heartbeat=600,              
+      blocked_connection_timeout=300)
   )
   channel = connection.channel()
-
+  
   def callback(ch, method, properties, body):
     err = to_mp3.start(body, fs_videos, fs_mp3s, ch)
     if err:

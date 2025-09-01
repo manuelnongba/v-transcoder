@@ -1,0 +1,7 @@
+flask==2.3.3
+openai>=1.6.0
+openai-whisper==20231117
+torch==2.0.1
+numpy==1.24.3
+requests==2.31.0
+python-dotenv==1.0.0
