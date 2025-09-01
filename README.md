@@ -1,6 +1,6 @@
-# Video to MP3 Converter Microservices
+# V-Transcoder: Video Processing Microservices Platform
 
-A Python microservices application that converts videos to MP3 format.
+A Python microservices application for video processing, including conversion to MP3, speech-to-text transcription, and openai translation services.
 
 ## Prerequisites
 
@@ -46,8 +46,10 @@ A Python microservices application that converts videos to MP3 format.
 
 ## Services
 
-- **Auth**: User authentication (port 5000)
-- **Gateway**: Main API gateway (port 8080)
-- **Converter**: Video to MP3 conversion
-- **Notification**: Email notifications
-- **RabbitMQ**: Message queue
+- **Auth**: User authentication and authorization (port 5000)
+- **Gateway**: Main API gateway and request routing (port 8080)
+- **Converter**: Video to MP3 conversion service
+- **Transcriber**: Speech-to-text transcription using Whisper AI
+- **Translator**: AI-powered text translation using OpenAI GPT
+- **Notification**: Email notification service
+- **RabbitMQ**: Message queue for service communication
