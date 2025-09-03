@@ -5,6 +5,8 @@ from auth import validate
 from auth_service import access
 from storage import util
 from bson.objectid import ObjectId
+from transcriber_service import transcriber
+from translator_service import translator
 
 server = Flask(__name__)
 # server.config["MONGO_URI"] = "mongodb://host.minikube.internal:27017/videos"
@@ -84,24 +86,12 @@ def transcribe():
   access = json.loads(access)
 
   if access["admin"]:
-    if len(request.files) < 1 or len(request.files) > 1:
-      return "exactly 1 file should be uploaded", 400
-    
-    for _, file in request.files.items():
-      try:
-        # Forward the file to the transcriber service
-        transcriber_url = "http://transcriber-service:8080/transcribe"
-        files = {"file": (file.filename, file.stream, file.content_type)}
-        
-        response = requests.post(transcriber_url, files=files, timeout=300)
-        
-        if response.status_code == 200:
-          return response.json()
-        else:
-          return f"Transcription failed: {response.text}", response.status_code
-          
-      except Exception as err:
-        return f"Internal server error: {str(err)}", 500
+    response, err = transcriber.transcribe(request)
+
+    if not err:
+      return response
+    else:
+      return err
   else:
     return "not authorized", 401
 
@@ -115,36 +105,16 @@ def translate():
   access = json.loads(access)
 
   if access["admin"]:
-    try:
-      # Forward the request to the translator service
-      translator_url = "http://translator-service:8080/translate"
-      
-      if request.files:
-        # If file is uploaded, forward as multipart form
-        files = {}
-        for key, file in request.files.items():
-          files[key] = (file.filename, file.stream, file.content_type)
-        
-        # Add form data
-        data = {}
-        for key, value in request.form.items():
-          data[key] = value
-        
-        response = requests.post(translator_url, files=files, data=data, timeout=300)
-      else:
-        # If JSON data, forward as JSON
-        response = requests.post(translator_url, json=request.get_json(), timeout=300)
-      
-      if response.status_code == 200:
-        return response.json()
-      else:
-        return f"Translation failed: {response.text}", response.status_code
-        
-    except Exception as err:
-      return f"Internal server error: {str(err)}", 500
+   
+    response, err = translator.translate(request)
+
+    if not err:
+      return response
+    else:
+      return err
+
   else:
     return "not authorized", 401
-
 
 if __name__ == "__main__":
   server.run(host="0.0.0.0", port=8080)

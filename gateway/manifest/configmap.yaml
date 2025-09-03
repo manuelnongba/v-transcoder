@@ -4,3 +4,5 @@ metadata:
   name: gateway-configmap
 data:
   AUTH_SERVICE_ADDRESS: 'auth:5000'
+  TRANSLATOR_SERVICE_ADDRESS: 'translator-service:8080'
+  TRANSCRIBER_SERVICE_ADDRESS: 'transcriber-service:8080'

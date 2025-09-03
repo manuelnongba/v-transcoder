@@ -6,6 +6,7 @@ venv/
 
 */manifest/secret.yaml
 manifest/secret.yaml
+*/manifest/openai-secret.yaml
 
 __pycache__/
 */__pycache__/

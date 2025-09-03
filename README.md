@@ -10,6 +10,27 @@ A Python microservices application for video processing, including conversion to
 - PostgreSQL (running on localhost:5432)
 - MongoDB (running on localhost:27017)
 
+Create .yaml files for the required secrets:
+
+auth-secret → contains POSTGRES_PASSWORD, JWT_SECRET
+
+notification-secret → contains GMAIL_ADDRESS, GMAIL_PASSWORD
+
+openai-secret → contains OPENAI_API_KEY
+
+Example structure:
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+name: auth-secret
+type: Opaque
+stringData:
+POSTGRES_PASSWORD: "your-db-password"
+JWT_SECRET: "your-jwt-secret"
+```
+
 ## Quick Start
 
 1. **Start minikube:**
@@ -17,6 +38,8 @@ A Python microservices application for video processing, including conversion to
    ```bash
    make start-minikube
    ```
+
+````
 
 2. **Build images:**
 
@@ -53,3 +76,4 @@ A Python microservices application for video processing, including conversion to
 - **Translator**: AI-powered text translation using OpenAI GPT
 - **Notification**: Email notification service
 - **RabbitMQ**: Message queue for service communication
+````
