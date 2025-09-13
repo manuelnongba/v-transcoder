@@ -9,11 +9,11 @@ from transcriber_service import transcriber
 from translator_service import translator
 
 server = Flask(__name__)
-# server.config["MONGO_URI"] = "mongodb://host.minikube.internal:27017/videos"
+# server.config["MONGO_URI"] = "mongodb://host.docker.internal:27017/videos"
 
-mongo_video = PyMongo(server, uri="mongodb://host.minikube.internal:27017/videos")
+mongo_video = PyMongo(server, uri="mongodb://host.docker.internal:27017/videos")
 
-mongo_mp3 = PyMongo(server, uri="mongodb://host.minikube.internal:27017/mp3s")
+mongo_mp3 = PyMongo(server, uri="mongodb://host.docker.internal:27017/mp3s")
 
 fs_videos = gridfs.GridFS(mongo_video.db)
 fs_mp3s = gridfs.GridFS(mongo_mp3.db)

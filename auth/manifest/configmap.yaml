@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: auth-configmap
 data:
-  POSTGRES_HOST: host.minikube.internal
+  POSTGRES_HOST: host.docker.internal
   POSTGRES_USER: emmanuelanongba
   POSTGRES_DB: auth
   POSTGRES_PORT: '5432'

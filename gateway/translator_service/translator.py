@@ -23,6 +23,6 @@ def translate(request):
     if response.status_code == 200:
       return response.json(), None
     else:
-      return f"Translation failed: {response.text}", response.status_code
+      return None, (f"Translation failed: {response.text}", response.status_code)
   except Exception as err:
-    return f"Internal server error: {str(err)}", 500
+    return None, (f"Internal server error: {str(err)}", 500)
