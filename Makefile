@@ -77,24 +77,24 @@ status:
 	kubectl get services
 
 pods-auth:
-	kubectl pods -l app=auth
+	kubectl get pods -l app=auth
 
 pods-gateway:
-	kubectl pods -l app=gateway
+	kubectl get pods -l app=gateway
 
 pods-converter:
-	kubectl pods -l app=converter
+	kubectl get pods -l app=converter
 
 pods-notification:
-	kubectl pods -l app=notification
+	kubectl get pods -l app=notification
 
 pods-transcriber:
-	kubectl pods -l app=transcriber
+	kubectl get pods -l app=transcriber
 
 pods-translator:
-	kubectl pods -l app=translator
+	kubectl get pods -l app=translator
 
-list_queues:
+list-queues:
 	kubectl exec rabbitmq-0 -- rabbitmqctl list_queues
 
 remove:

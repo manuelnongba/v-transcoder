@@ -5,7 +5,7 @@ metadata:
   labels:
     app: transcriber
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: transcriber
@@ -23,11 +23,3 @@ spec:
           image: manuelnongba/transcriber
           ports:
             - containerPort: 8080
-          env: []
-          resources:
-            requests:
-              memory: '1Gi'
-              cpu: '500m'
-            limits:
-              memory: '2Gi'
-              cpu: '1000m'

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: translator
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: translator
@@ -29,10 +29,3 @@ spec:
                 secretKeyRef:
                   name: openai-secret
                   key: OPENAI_API_KEY
-          resources:
-            requests:
-              memory: '1Gi'
-              cpu: '500m'
-            limits:
-              memory: '2Gi'
-              cpu: '1000m'
