@@ -1,4 +1,4 @@
-import requests
+import requests, os
 
 def transcribe(request):
   if len(request.files) < 1 or len(request.files) > 1:

@@ -1,9 +1,7 @@
 import os
 import tempfile
-import requests
 import whisper
 from flask import Flask, request, jsonify
-from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 import openai
 
@@ -30,8 +28,7 @@ def transcribe_audio(file_path):
 def translate_text(text, target_language):
     """Translate text using OpenAI GPT"""
     try:
-        from openai import OpenAI
-        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -58,7 +55,7 @@ def translate():
         if "file" in request.files:
             file = request.files["file"]
             if file.filename == "":
-                return jsonify({"error": "No file selected"}), 400
+                return "No file selected", 400
             
             with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as temp_file:
                 file.save(temp_file.name)
@@ -88,7 +85,7 @@ def translate():
             target_language = data.get("targetLang", "en")
             
             if not text:
-                return jsonify({"error": "No text provided"}), 400
+                return "No text provided", 400
             
             translated_text = translate_text(text, target_language)
             
@@ -99,10 +96,10 @@ def translate():
             })
         
         else:
-            return jsonify({"error": "No file or text provided"}), 400
+            return  "No file or text provided", 400
             
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return str(e), 500
 
 @app.route("/health", methods=["GET"])
 def health():

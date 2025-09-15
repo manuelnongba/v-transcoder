@@ -20,11 +20,11 @@ def get_whisper_model():
 def transcribe():
     try:
         if "file" not in request.files:
-            return jsonify({"error": "No file provided"}), 400
+            return "No file provided", 400
         
         file = request.files["file"]
         if file.filename == "":
-            return jsonify({"error": "No file selected"}), 400
+            return "No file selected", 400
         
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as temp_file:
             file.save(temp_file.name)

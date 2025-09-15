@@ -1,4 +1,4 @@
-import requests
+import requests, os
 
 def translate(request):
   try:
