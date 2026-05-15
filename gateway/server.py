@@ -1,4 +1,5 @@
 import gridfs, pika, json
+import os
 from flask import Flask, request, send_file, jsonify
 from flask_pymongo import PyMongo
 from auth import validate
@@ -18,8 +19,30 @@ mongo_mp3 = PyMongo(server, uri="mongodb://host.docker.internal:27017/mp3s")
 fs_videos = gridfs.GridFS(mongo_video.db)
 fs_mp3s = gridfs.GridFS(mongo_mp3.db)
 
-connection = pika.BlockingConnection(pika.ConnectionParameters("rabbitmq", heartbeat=600, blocked_connection_timeout=300))
-channel = connection.channel()
+connection = None
+channel = None
+
+
+def get_rabbit_channel():
+  global connection, channel
+
+  if connection and channel:
+    try:
+      if connection.is_open and channel.is_open:
+        return channel
+    except Exception:
+      pass
+
+  connection = pika.BlockingConnection(
+    pika.ConnectionParameters("rabbitmq", heartbeat=600, blocked_connection_timeout=300)
+  )
+  channel = connection.channel()
+  video_queue = os.environ.get("VIDEO_QUEUE", "video")
+  channel.queue_declare(queue=video_queue, durable=True)
+  return channel
+
+
+get_rabbit_channel()
 
 @server.route("/login", methods=["POST"])
 def login():
@@ -44,7 +67,7 @@ def upload():
       return "exactly 1 file should be uploaded", 400
     
     for _, file in request.files.items():
-      err = util.upload(file, fs_videos, channel, access)
+      err = util.upload(file, fs_videos, get_rabbit_channel(), access)
 
       if err:
         return err
