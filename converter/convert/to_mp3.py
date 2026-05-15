@@ -27,11 +27,16 @@ def start(message, fs_videos, fs_mp3s, channel):
   os.remove(tf_path)
 
   message["mp3_fid"] = str(fid)
+  mp3_queue = os.environ.get("MP3_QUEUE")
+  if not mp3_queue:
+    fs_mp3s.delete(fid)
+    return "MP3_QUEUE is not configured"
+  channel.queue_declare(queue=mp3_queue, durable=True)
 
   try:
      channel.basic_publish(
       exchange="",
-      routing_key=os.environ.get("MP3_QUEUE"),
+      routing_key=mp3_queue,
       body=json.dumps(message),
       properties=pika.BasicProperties(
         delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
