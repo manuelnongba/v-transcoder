@@ -21,6 +21,7 @@ spec:
       containers:
         - name: gateway
           image: manuelnongba/gateway
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: gateway-configmap
