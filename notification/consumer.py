@@ -11,6 +11,10 @@ def main():
       )
   )
   channel = connection.channel()
+  mp3_queue = os.environ.get("MP3_QUEUE")
+  if not mp3_queue:
+    raise RuntimeError("MP3_QUEUE is not configured")
+  channel.queue_declare(queue=mp3_queue, durable=True)
 
   def callback(ch, method, properties, body):
     err = email.notification(body)
@@ -20,7 +24,7 @@ def main():
       ch.basic_ack(delivery_tag=method.delivery_tag)
 
   channel.basic_consume(
-    queue=os.environ.get("MP3_QUEUE"), on_message_callback=callback
+    queue=mp3_queue, on_message_callback=callback
   )
 
   print("Waiting messages. To exit, press control + 'C'")
