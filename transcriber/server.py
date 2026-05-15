@@ -4,11 +4,7 @@ import tempfile
 import threading
 from pathlib import Path
 
-os.environ.setdefault("OMP_NUM_THREADS", "1")
-os.environ.setdefault("MKL_NUM_THREADS", "1")
-os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
-
-import whisper
+from faster_whisper import WhisperModel
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 
@@ -16,9 +12,12 @@ load_dotenv()
 
 app = Flask(__name__)
 
+WHISPER_MODEL = os.getenv("WHISPER_MODEL", "tiny")
+WHISPER_DEVICE = os.getenv("WHISPER_DEVICE", "cpu")
+WHISPER_COMPUTE_TYPE = os.getenv("WHISPER_COMPUTE_TYPE", "int8")
+
 _model = None
 _model_lock = threading.Lock()
-WHISPER_MODEL = os.getenv("WHISPER_MODEL", "tiny")
 
 
 def get_model():
@@ -26,7 +25,11 @@ def get_model():
     if _model is None:
         with _model_lock:
             if _model is None:
-                _model = whisper.load_model(WHISPER_MODEL)
+                _model = WhisperModel(
+                    WHISPER_MODEL,
+                    device=WHISPER_DEVICE,
+                    compute_type=WHISPER_COMPUTE_TYPE,
+                )
     return _model
 
 
@@ -60,6 +63,13 @@ def _normalize_audio_to_wav(input_path):
         raise RuntimeError(f"ffmpeg failed: {process.stderr.strip()}")
     return output_path
 
+
+def _transcribe_audio(wav_path):
+    model = get_model()
+    segments, info = model.transcribe(wav_path, beam_size=1, vad_filter=True)
+    transcript = "".join(segment.text for segment in segments).strip()
+    return info.language, transcript
+
 @app.route("/transcribe", methods=["POST"])
 def transcribe():
     try:
@@ -74,11 +84,7 @@ def transcribe():
         wav_path = _normalize_audio_to_wav(uploaded_path)
         
         try:
-            model = get_model()
-            result = model.transcribe(wav_path, fp16=False)
-            
-            detected_language = result["language"]
-            transcript = result["text"].strip()
+            detected_language, transcript = _transcribe_audio(wav_path)
             
             return jsonify({
                 "language": detected_language,
