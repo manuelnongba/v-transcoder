@@ -21,5 +21,16 @@ spec:
       containers:
         - name: transcriber
           image: manuelnongba/transcriber
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+          env:
+            - name: WHISPER_MODEL
+              value: tiny
+          resources:
+            requests:
+              cpu: '1'
+              memory: '2Gi'
+            limits:
+              cpu: '2'
+              memory: '4Gi'
