@@ -74,10 +74,72 @@ stringData:
 
 ## Services
 
+All API requests go through the gateway at `http://mp3converter.com`.
+
+Get a JWT token first:
+
+```bash
+TOKEN=$(curl -sS -X POST http://mp3converter.com/login \
+   -u "you@example.com:your-password")
+
+echo "Token length: ${#TOKEN}"
+```
+
 - Auth: User authentication and authorization (port 5000)
+
+```bash
+curl -i -X POST http://mp3converter.com/login \
+   -u "you@example.com:your-password"
+```
+
 - Gateway: Main API gateway and request routing (port 8080)
+
+```bash
+curl -i http://mp3converter.com/
+```
+
 - Converter: Video to MP3 conversion service
-- Transcriber: Speech-to-text transcription using Whisper AI
+
+```bash
+curl -i -X POST http://mp3converter.com/upload \
+   -H "Authorization: Bearer $TOKEN" \
+   -F "file=@/path/to/video-file"
+```
+
+- Transcriber: Speech-to-text transcription service
+
+```bash
+curl -i -X POST http://mp3converter.com/transcribe \
+   -H "Authorization: Bearer $TOKEN" \
+   -F "file=@/path/to/audio-or-video-file"
+```
+
 - Translator: AI-powered text translation using OpenAI GPT
+
+```bash
+curl -i -X POST http://mp3converter.com/translate \
+   -H "Authorization: Bearer $TOKEN" \
+   -H "Content-Type: application/json" \
+   -d '{"text":"Hello world","targetLang":"fr"}'
+```
+
+```bash
+curl -i -X POST http://mp3converter.com/translate \
+   -H "Authorization: Bearer $TOKEN" \
+   -F "file=@/path/to/audio-or-video-file" \
+   -F "targetLang=fr"
+```
+
 - Notification: Email notification service
+  Triggered asynchronously after successful conversion; no direct gateway endpoint.
+
 - RabbitMQ: Message queue for service communication
+  Access management UI at `http://rabbitmq-manager.com`.
+
+Download converted MP3 by file id:
+
+```bash
+curl -i -X GET "http://mp3converter.com/download?fid=<MP3_FILE_ID>" \
+   -H "Authorization: Bearer $TOKEN" \
+   -o output.mp3
+```
